@@ -75,37 +75,37 @@ public static class ServiceProviderExtensions
 
             // Check replica set status
             var admin = mongoClient.GetDatabase("admin");
-            var replicaSetStatus = await admin.RunCommandAsync<BsonDocument>(new BsonDocument("replSetGetStatus", 1));
+            //var replicaSetStatus = await admin.RunCommandAsync<BsonDocument>(new BsonDocument("replSetGetStatus", 1));
 
-            // Check if there's a primary node
-            if (replicaSetStatus.Contains("members") && replicaSetStatus["members"].IsBsonArray)
-            {
-                var members = replicaSetStatus["members"].AsBsonArray;
-                var primaryFound = false;
+            //// Check if there's a primary node
+            //if (replicaSetStatus.Contains("members") && replicaSetStatus["members"].IsBsonArray)
+            //{
+            //    var members = replicaSetStatus["members"].AsBsonArray;
+            //    var primaryFound = false;
 
-                foreach (BsonDocument member in members)
-                {
-                    if (member.Contains("state") && member["state"] == 1) // state 1 = PRIMARY
-                    {
-                        logger.LogInformation("Found primary node: {NodeName}", member["name"].AsString);
-                        primaryFound = true;
-                        break;
-                    }
-                }
+            //    foreach (BsonDocument member in members)
+            //    {
+            //        if (member.Contains("state") && member["state"] == 1) // state 1 = PRIMARY
+            //        {
+            //            logger.LogInformation("Found primary node: {NodeName}", member["name"].AsString);
+            //            primaryFound = true;
+            //            break;
+            //        }
+            //    }
 
-                if (primaryFound)
-                {
-                    logger.LogInformation("MongoDB replica set is ready with a primary node");
-                }
-                else
-                {
-                    logger.LogWarning("No primary node found in the replica set");
-                }
-            }
-            else
-            {
-                logger.LogWarning("Could not verify replica set members");
-            }
+            //    if (primaryFound)
+            //    {
+            //        logger.LogInformation("MongoDB replica set is ready with a primary node");
+            //    }
+            //    else
+            //    {
+            //        logger.LogWarning("No primary node found in the replica set");
+            //    }
+            //}
+            //else
+            //{
+            //    logger.LogWarning("Could not verify replica set members");
+            //}
 
             logger.LogInformation("MongoDB connection successfully established to database: {DatabaseName}", settings.DatabaseName);
         }
